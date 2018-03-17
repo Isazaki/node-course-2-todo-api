@@ -1,6 +1,7 @@
-var express     = require("express"),
+var express     = require('express'),
     app         = express(),
-    bodyParser  = require("body-parser"),
+    bodyParser  = require('body-parser'),
+    {ObjectId}  = require('mongodb'),
     {mongoose}  = require('./db/mongoose'),
     {Todo}      = require('./models/todo'),
     {User}      = require('./models/user')
@@ -26,6 +27,25 @@ app.get('/todos', (req, res) => {
     res.status(400).send(e)
   });
 });
+
+// GET /todos/1234324
+app.get('/todos/:id', (req, res) => {
+  // res.send(req.params); // Postman testing...
+  var id = req.params.id;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(404).send();
+  }
+
+  Todo.findById(id).then((todo) => {
+    if (!todo) {
+      return res.status(404).send();
+    }
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
+  });
+})
 
 app.listen(3000, () => {
   console.log('Listening to Music on port 3000.');
