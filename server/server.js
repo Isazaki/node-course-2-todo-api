@@ -6,6 +6,8 @@ var express     = require('express'),
     {Todo}      = require('./models/todo'),
     {User}      = require('./models/user')
 
+const port = process.env.PORT || 3000;
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post('/todos', (req, res) => {
@@ -47,8 +49,8 @@ app.get('/todos/:id', (req, res) => {
   });
 })
 
-app.listen(3000, () => {
-  console.log('Listening to Music on port 3000.');
+app.listen(port, () => {
+  console.log(`Listening to Music on port ${port}`);
 });
 
 module.exports = {app};
